@@ -7,24 +7,21 @@ public class AudioPlayer : MonoBehaviour
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private List<AudioClip> audioClips;
 
-    private float volume = 10.0f;
+    private float volume = 1.0f;
+
+    public float Volume
+    { 
+        get => volume;
+        set
+        {
+            volume = value;
+            audioSource.volume = volume;
+        }
+    }
 
     void Awake()
     {
         audioSource.loop = isLoop;
-
-        // 테스트용
-        if (isLoop)
-        {
-            audioSource.clip = audioClips[0];
-            audioSource.Play();
-        }
-    }
-
-    public void SetVolume(float volume)
-    {
-        this.volume = volume / 10.0f;
-        audioSource.volume = this.volume;
     }
 
     public bool Play(int id)

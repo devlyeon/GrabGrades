@@ -1,7 +1,6 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 [Serializable]
 public struct AudioSettings
@@ -11,38 +10,73 @@ public struct AudioSettings
 
 public class AudioManager : MonoBehaviour
 {
+    public static AudioManager audioManager;
+
     [SerializeField] private AudioPlayer bgmPlayer, sfxPlayer;
 
     private AudioSettings audioSettings;
+    private Data<AudioSettings> data;
 
     public float MainVolume
     {
         get => audioSettings.main;
-        set => audioSettings.main = value;
+        set
+        {
+            audioSettings.main = value;
+            bgmPlayer.Volume = BgmVolume;
+            sfxPlayer.Volume = SfxVolume;
+            data.Write(audioSettings);
+        }
     }
 
     public float BgmVolume
     { 
-        get => audioSettings.main / 10 * audioSettings.bgm;
-        set => audioSettings.bgm = value;
+        get => audioSettings.main * audioSettings.bgm;
+        set
+        {
+            audioSettings.bgm = value;
+            bgmPlayer.Volume = BgmVolume;
+            data.Write(audioSettings);
+        }
     }
 
     public float SfxVolume
     { 
-        get => audioSettings.main / 10 * audioSettings.sfx;
-        set => audioSettings.sfx = value;
+        get => audioSettings.main * audioSettings.sfx;
+        set
+        {
+            audioSettings.sfx = value;
+            sfxPlayer.Volume = SfxVolume;
+            data.Write(audioSettings);
+        }
     }
 
     void Awake()
     {
-        Data<AudioSettings> data = new("audioPref.dat");
-        audioSettings = data.Read();
-        bgmPlayer.SetVolume(BgmVolume);
-        sfxPlayer.SetVolume(SfxVolume);
+        if (audioManager != null) Destroy(gameObject);
+        else
+        {
+            audioManager = this;
+            DontDestroyOnLoad(gameObject);
+            bgmPlayer.Play(0);
+        }
+
+        data = new("audioPref.dat");
+        if (data.Exists()) audioSettings = data.Read();
+        else
+        {
+            audioSettings.main = 1.0f;
+            audioSettings.bgm = 1.0f;
+            audioSettings.sfx = 1.0f;
+        }
+
+        bgmPlayer.Volume = BgmVolume;
+        sfxPlayer.Volume = SfxVolume;
     }
 
-    public void OnMainVolumeChanged(float value)
+    void Update()
     {
-        
+        if (Mouse.current.leftButton.wasPressedThisFrame)
+            sfxPlayer.Play(0);
     }
 }
