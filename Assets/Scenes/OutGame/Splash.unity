@@ -1404,6 +1404,7 @@ MonoBehaviour:
   isLoop: 1
   audioSource: {fileID: 1056067064}
   audioClips:
+  - {fileID: 8300000, guid: 15854e3412947451ab79841750f02f54, type: 3}
   - {fileID: 8300000, guid: 4c1876f69ec204ebc81fb866fa726095, type: 3}
 --- !u!82 &1056067064
 AudioSource:
