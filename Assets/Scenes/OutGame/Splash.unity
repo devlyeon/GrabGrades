@@ -1303,6 +1303,7 @@ MonoBehaviour:
   audioSource: {fileID: 1011188130}
   audioClips:
   - {fileID: 8300000, guid: dc623a0e7ce7f480688e0725ae517467, type: 3}
+  - {fileID: 8300000, guid: 7a43bf1461a9249ff909b3be10b93cc7, type: 3}
 --- !u!82 &1011188130
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1448,6 +1449,7 @@ MonoBehaviour:
   isLoop: 1
   audioSource: {fileID: 1056067064}
   audioClips:
+  - {fileID: 8300000, guid: 6c6ed20f386bb4bb89251df09d1d432c, type: 3}
   - {fileID: 8300000, guid: 15854e3412947451ab79841750f02f54, type: 3}
   - {fileID: 8300000, guid: 4c1876f69ec204ebc81fb866fa726095, type: 3}
 --- !u!82 &1056067064
@@ -1850,6 +1852,7 @@ GameObject:
   - component: {fileID: 1315308745}
   - component: {fileID: 1315308748}
   - component: {fileID: 1315308749}
+  - component: {fileID: 1315308750}
   m_Layer: 5
   m_Name: GameStart
   m_TagString: Untagged
@@ -1933,6 +1936,18 @@ MonoBehaviour:
           m_StringArgument: Play
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1315308750}
+        m_TargetAssemblyTypeName: ButtonSfx, Assembly-CSharp
+        m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1315308746
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2005,6 +2020,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5c01db77130b440aa0ac5b5ce3b51a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SplashButton
+--- !u!114 &1315308750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1315308743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5c3ee7ae1cfe4b8e877f6f360a6287e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonSfx
 --- !u!1 &1379647746
 GameObject:
   m_ObjectHideFlags: 0

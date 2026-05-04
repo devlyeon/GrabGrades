@@ -12,13 +12,14 @@ public class ResolutionControl : MonoBehaviour
 {
     [SerializeField] private TMP_Dropdown dropdown;
 
+    private Data<FullScreenSetting> fullScreen;
     private Data<ResolutionSetting> data;
     private bool isFullScreen = true;
     private readonly List<Resolution> resolutions = new();
 
     void Awake()
     {
-        Data<FullScreenSetting> fullScreen = new("displayPref_01.dat");
+        fullScreen = new("displayPref_01.dat");
         isFullScreen = fullScreen.Read().isFullScreen;
         data = new("displayPref_02.dat");
         dropdown.options.Clear();
@@ -39,6 +40,7 @@ public class ResolutionControl : MonoBehaviour
 
     public void SetResolution(int id)
     {
+        isFullScreen = fullScreen.Read().isFullScreen;
         Screen.fullScreenMode = isFullScreen ? FullScreenMode.FullScreenWindow : FullScreenMode.Windowed;
         Screen.SetResolution(resolutions[id].width, resolutions[id].height, isFullScreen);
         data.Write(new ResolutionSetting(){ width = resolutions[id].width, height = resolutions[id].height });

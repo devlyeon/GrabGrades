@@ -15,7 +15,7 @@ public class FullScreenToggle : ToggleButton
         Data<ResolutionSetting> resolutionData = new("displayPref_01.dat");
         resolution = resolutionData.Read();
 
-        isActive = Screen.fullScreen;
+        isActive = data.Read().isFullScreen;
         base.Awake();
     }
 

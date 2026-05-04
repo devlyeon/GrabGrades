@@ -79,4 +79,9 @@ public class AudioManager : MonoBehaviour
         if (Mouse.current.leftButton.wasPressedThisFrame)
             sfxPlayer.Play(0);
     }
+
+    public void PlaySfx(int id)
+    {
+        sfxPlayer.Play(id);
+    }
 }
