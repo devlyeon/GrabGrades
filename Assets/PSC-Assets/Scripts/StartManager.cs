@@ -2,12 +2,12 @@ using System.Collections;
 using UnityEngine;
 using TMPro;
 
-public class StartCounting : MonoBehaviour
+public class StartManager : MonoBehaviour
 {
-    public GameObject gameManager;
-    public GameObject timerManager;
-    public TextMeshProUGUI startCounter;
-    public int count = 3;
+    [SerializeField] private GameObject gameManager;
+    [SerializeField] private GameObject timerManager;
+    [SerializeField] private TextMeshProUGUI startCounter;
+    [SerializeField] private int count = 3;
 
     void Start()
     {

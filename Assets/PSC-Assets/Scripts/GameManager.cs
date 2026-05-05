@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject[] gradePrefabs;
     [SerializeField] private float minSpawnDelay = 2f;
     [SerializeField] private float maxSpawnDelay = 4.5f;
-    [SerializeField] private float simultaneousHitWindow = 0.05f;
+    [SerializeField] private float simultaneousHitWindow = 0.05f; // 동시 득점 가능 시간 - 해당 시간동안 팔이 닿아도 성적표가 사라지지 않음
 
     private GameObject currentItem;
     private int currentItemIndex;
@@ -43,13 +43,13 @@ public class GameManager : MonoBehaviour
         lHitCurrent = false;
         rHitCurrent = false;
 
-        if (currentItem != null) Destroy(currentItem);
+        if (currentItem != null) Destroy(currentItem); // 기존의 성적표 제거
 
         currentItemIndex = GetRandomGradeIndex();
-        currentItem = Instantiate(gradePrefabs[currentItemIndex], Vector2.zero, Quaternion.identity);
+        currentItem = Instantiate(gradePrefabs[currentItemIndex], Vector2.zero, Quaternion.identity); // 랜덤으로 선택된 오브젝트 생성
     }
 
-    private int GetRandomGradeIndex()
+    private int GetRandomGradeIndex() // 각 성적표 생성 확률 조정
     {
         int rand = Random.Range(0, 100);
 
@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour
 
     public void ProcessScore(bool isLeftPlayer)
     {
-        // 성적표가 없거나 해당 플레이어가 이미 타격했다면 무시
+        // 성적표가 없거나 해당 플레이어가 이미 팔을 뻗은 상태면 무시
         if (currentItem == null) return;
         if (isLeftPlayer && lHitCurrent) return;
         if (!isLeftPlayer && rHitCurrent) return;
@@ -71,14 +71,14 @@ public class GameManager : MonoBehaviour
 
         UpdateScore(isLeftPlayer);
 
-        // 처음 닿았을 때 딜레이 주기
+        // 처음 누군가가 득/실점 했을 때 동시 득점을 위해 약간 대기 및 코루틴 실행
         if (isFirstHit)
         {
             StartCoroutine(FinalizeHitWithDelay());
         }
     }
 
-    private void UpdateScore(bool isLeftPlayer)
+    private void UpdateScore(bool isLeftPlayer) // 득점 - 왼쪽 플레이거 득점을 한게 아니라면 반드시 오른쪽 플레이어가 득점을 한다고 가정
     {
         int scoreDelta = gradeScores[currentItemIndex];
 
@@ -111,8 +111,15 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator WaitAndSpawnNext()
     {
-        float delay = Random.Range(minSpawnDelay, maxSpawnDelay);
+        float delay = Random.Range(minSpawnDelay, maxSpawnDelay); // 설정한 시간 값 사이에서 랜덤으로 지연 시간 설정
         yield return new WaitForSeconds(delay);
-        SpawnGrade();
+        SpawnGrade(); // 성적 생성
+    }
+    
+    public int GetWinnerID() // 승자 확인
+    {
+        if (lScore > rScore) return 1; // 왼쪽 플레이어 승리
+        if (rScore > lScore) return 2; // 오른쪽 플레이어 승리
+        return 0; // 비겼을 때
     }
 }
