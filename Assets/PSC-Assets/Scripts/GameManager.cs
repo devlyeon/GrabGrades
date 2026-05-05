@@ -26,6 +26,8 @@ public class GameManager : MonoBehaviour
     
     private readonly int[] gradeScores = { 3, 1, -2 };
 
+    public bool isGameOver = true;
+
     void Awake()
     {
         if (instance == null) instance = this;
@@ -35,19 +37,24 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         SpawnGrade();
+        isGameOver = false;
         SoundManager.instance.PlayBGM(SoundType.BGM);
     }
 
     private void SpawnGrade()
     {
-        // 상태 초기화
-        lHitCurrent = false;
-        rHitCurrent = false;
+        if (!isGameOver)
+        {
+            // 상태 초기화
+            lHitCurrent = false;
+            rHitCurrent = false;
 
-        if (currentItem != null) Destroy(currentItem); // 기존의 성적표 제거
+            if (currentItem != null) Destroy(currentItem); // 기존의 성적표 제거
 
-        currentItemIndex = GetRandomGradeIndex();
-        currentItem = Instantiate(gradePrefabs[currentItemIndex], Vector2.zero, Quaternion.identity); // 랜덤으로 선택된 오브젝트 생성
+            currentItemIndex = GetRandomGradeIndex();
+            currentItem =
+                Instantiate(gradePrefabs[currentItemIndex], Vector2.zero, Quaternion.identity); // 랜덤으로 선택된 오브젝트 생성
+        }
     }
 
     private int GetRandomGradeIndex() // 각 성적표 생성 확률 조정

@@ -12,7 +12,7 @@ public class LeftArmControl : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.A) && GameManager.instance.isGameOver == false)
         {
             // "Idle" 상태이고, 전이 중이 아닐 때만 새로운 입력을 허용
             if (leftArmAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") && 

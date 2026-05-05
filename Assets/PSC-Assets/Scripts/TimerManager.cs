@@ -22,6 +22,7 @@ public class TimerManager : MonoBehaviour
         {
             remainingTime = 0;
             isTimerEnded = true;
+            GameManager.instance.isGameOver = true;
 
             int whoIsWinner = GameManager.instance.GetWinnerID();
 
