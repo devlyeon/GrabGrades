@@ -1,79 +1,118 @@
+using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-    
-    public GameObject[] grades;
-    public TextMeshProUGUI lscoreText;
-    public TextMeshProUGUI rscoreText;
+
+    [Header("UI References")]
+    [SerializeField] private TextMeshProUGUI lScoreText;
+    [SerializeField] private TextMeshProUGUI rScoreText;
+
+    [Header("Game Settings")]
+    [SerializeField] private GameObject[] gradePrefabs;
+    [SerializeField] private float minSpawnDelay = 2f;
+    [SerializeField] private float maxSpawnDelay = 4.5f;
+    [SerializeField] private float simultaneousHitWindow = 0.05f;
 
     private GameObject currentItem;
-    private int itemIndex;
-    private int lscore = 0;
-    private int rscore = 0;
+    private int currentItemIndex;
+    private int lScore = 0;
+    private int rScore = 0;
+
+    private bool lHitCurrent = false;
+    private bool rHitCurrent = false;
     
+    private readonly int[] gradeScores = { 3, 1, -2 };
+
     void Awake()
     {
-        instance = this;
+        if (instance == null) instance = this;
+        else Destroy(gameObject);
     }
 
     void Start()
     {
-        getRandomGrades();
+        SpawnGrade();
     }
 
-    void Update()
+    private void SpawnGrade()
     {
+        // 상태 초기화
+        lHitCurrent = false;
+        rHitCurrent = false;
+
+        if (currentItem != null) Destroy(currentItem);
+
+        currentItemIndex = GetRandomGradeIndex();
+        currentItem = Instantiate(gradePrefabs[currentItemIndex], Vector2.zero, Quaternion.identity);
     }
 
-    void getRandomGrades()
+    private int GetRandomGradeIndex()
     {
-        if(currentItem != null) Destroy(currentItem);
-        int randomNumber;
-        randomNumber = Random.Range(0, 100);
-        if(randomNumber < 65) itemIndex = 1; // B 65%
-        else if(randomNumber < 80) itemIndex = 0; // A 15%
-        else if(randomNumber < 100) itemIndex = 2; // F 20%
-        currentItem = Instantiate(grades[itemIndex], Vector2.zero, Quaternion.identity);
+        int rand = Random.Range(0, 100);
+
+        if (rand < 65) return 1; // B 65%
+        if (rand < 80) return 0; // A 15%
+        return 2;                // F 20%
     }
 
-    private bool isProcessing = false;
-
-    public void ProcessScore(bool isLP)
+    public void ProcessScore(bool isLeftPlayer)
     {
-        if (isProcessing) return;
-        isProcessing = true;
+        // 성적표가 없거나 해당 플레이어가 이미 타격했다면 무시
+        if (currentItem == null) return;
+        if (isLeftPlayer && lHitCurrent) return;
+        if (!isLeftPlayer && rHitCurrent) return;
 
-        int score = 0;
-        switch (itemIndex)
+        bool isFirstHit = !lHitCurrent && !rHitCurrent;
+        if (isLeftPlayer) lHitCurrent = true;
+        else rHitCurrent = true;
+
+        UpdateScore(isLeftPlayer);
+
+        // 처음 닿았을 때 딜레이 주기
+        if (isFirstHit)
         {
-            case 0: score = 3; break;
-            case 1: score = 1; break;
-            case 2: score = -2; break;
-            default: break;
+            StartCoroutine(FinalizeHitWithDelay());
         }
+    }
 
-        if (isLP)
+    private void UpdateScore(bool isLeftPlayer)
+    {
+        int scoreDelta = gradeScores[currentItemIndex];
+
+        if (isLeftPlayer)
         {
-            lscore += score;
-            lscoreText.text = lscore.ToString();
+            lScore += scoreDelta;
+            lScoreText.text = lScore.ToString();
         }
         else
         {
-            rscore += score;
-            rscoreText.text = rscore.ToString();
+            rScore += scoreDelta;
+            rScoreText.text = rScore.ToString();
         }
-    
-        getRandomGrades();
-
-        Invoke("ResetProcessing", 0.1f); 
     }
 
-    void ResetProcessing()
+    private IEnumerator FinalizeHitWithDelay()
     {
-        isProcessing = false;
+        // 동시 입력 허용 시간 대기
+        yield return new WaitForSeconds(simultaneousHitWindow);
+
+        // 현재 성적표 제거 및 대기 상태 진입
+        if (currentItem != null)
+        {
+            Destroy(currentItem);
+            currentItem = null;
+        }
+
+        StartCoroutine(WaitAndSpawnNext());
+    }
+
+    private IEnumerator WaitAndSpawnNext()
+    {
+        float delay = Random.Range(minSpawnDelay, maxSpawnDelay);
+        yield return new WaitForSeconds(delay);
+        SpawnGrade();
     }
 }

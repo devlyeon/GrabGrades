@@ -14,10 +14,12 @@ public class LeftArmControl : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
-            // "Base Layer.Idle" 상태일 때만 새로운 입력을 허용
-            if (leftArmAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+            // "Idle" 상태이고, 전이 중이 아닐 때만 새로운 입력을 허용
+            if (leftArmAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle") && 
+                !leftArmAnimator.IsInTransition(0))
             {
                 hasHit = false;
+                leftArmAnimator.ResetTrigger("Pressed");
                 leftArmAnimator.SetTrigger("Pressed");
             }
         }

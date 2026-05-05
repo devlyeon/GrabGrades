@@ -3,8 +3,8 @@ using TMPro;
 
 public class Timer : MonoBehaviour
 {
-    public float remainingTime = 80f; // 1분 20초 = 80초
-    public TextMeshProUGUI timerText; // UI 연결용
+    [SerializeField] private float remainingTime = 80f; // 1분 20초 = 80초
+    [SerializeField] private TextMeshProUGUI timerText; // UI 연결용
 
     void Update()
     {
