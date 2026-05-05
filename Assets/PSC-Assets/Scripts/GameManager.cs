@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         SpawnGrade();
+        SoundManager.instance.PlayBGM(SoundType.BGM);
     }
 
     private void SpawnGrade()
@@ -91,6 +92,15 @@ public class GameManager : MonoBehaviour
         {
             rScore += scoreDelta;
             rScoreText.text = rScore.ToString();
+        }
+
+        if ((currentItemIndex == 0 || currentItemIndex == 1) && currentItem != null)
+        {
+            SoundManager.instance.PlaySFX(SoundType.GetSFX);
+        }
+        else if (currentItemIndex == 2 && currentItem != null)
+        {
+            SoundManager.instance.PlaySFX(SoundType.LostSFX);
         }
     }
 
