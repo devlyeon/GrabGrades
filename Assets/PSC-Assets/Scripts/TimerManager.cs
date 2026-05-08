@@ -1,12 +1,13 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class TimerManager : MonoBehaviour
 {
     [SerializeField] private float remainingTime = 80f; // 1분 20초 = 80초
     [SerializeField] private TextMeshProUGUI timerText; // UI 연결용
-    [SerializeField] private TextMeshProUGUI WinUI;
-    [SerializeField] private TextMeshProUGUI LoseUI;
+    [SerializeField] private Image WinUI;
+    [SerializeField] private Image LoseUI;
     [SerializeField] private TextMeshProUGUI DrawUI;
     [SerializeField] private RectTransform LeftPos;
     [SerializeField] private RectTransform RightPos;
@@ -53,12 +54,12 @@ public class TimerManager : MonoBehaviour
         timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 
-    private void setUI(TextMeshProUGUI textUI, RectTransform target)
+    private void setUI(UnityEngine.UI.Image imageUI, RectTransform target)
     {
-        if (textUI != null && target != null)
+        if (imageUI != null && target != null)
         {
-            textUI.transform.position = target.position;
-            textUI.gameObject.SetActive(true);
+            imageUI.transform.position = target.position;
+            imageUI.gameObject.SetActive(true);
         }
     }
 }

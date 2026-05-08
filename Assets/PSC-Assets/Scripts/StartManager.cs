@@ -25,7 +25,7 @@ public class StartManager : MonoBehaviour
         startCounter.text = "START!";
         startCounter.gameObject.SetActive(false);
         timerManager.SetActive(true);
-        yield return new WaitForSeconds(1.0f); // 정확히 1초 대기
+        //yield return new WaitForSeconds(1.0f); // 정확히 1초 대기
         gameManager.SetActive(true);
     }
     

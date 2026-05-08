@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
@@ -15,12 +16,17 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float minSpawnDelay = 2f;
     [SerializeField] private float maxSpawnDelay = 4.5f;
     [SerializeField] private float simultaneousHitWindow = 0.05f; // 동시 득점 가능 시간 - 해당 시간동안 팔이 닿아도 성적표가 사라지지 않음
-
+    
+    private Dictionary<KeyCode, float> keyHeat = new Dictionary<KeyCode, float>(); // 키 코드 별로 연타 감지
+    
     private GameObject currentItem;
     private int currentItemIndex;
     private int lScore = 0;
     private int rScore = 0;
 
+    private int defaultB = 65; // B나올 기본 확률
+    private int defaultA = 15; // A나올 기본 확률
+    
     private bool lHitCurrent = false;
     private bool rHitCurrent = false;
     
@@ -61,8 +67,8 @@ public class GameManager : MonoBehaviour
     {
         int rand = Random.Range(0, 100);
 
-        if (rand < 65) return 1; // B 65%
-        if (rand < 80) return 0; // A 15%
+        if (rand < defaultB) return 1; // B 65%
+        if (rand < defaultB + defaultA) return 0; // A 15%
         return 2;                // F 20%
     }
 
@@ -138,5 +144,26 @@ public class GameManager : MonoBehaviour
         if (lScore > rScore) return 1; // 왼쪽 플레이어 승리
         if (rScore > lScore) return 2; // 오른쪽 플레이어 승리
         return 0; // 비겼을 때
+    }
+    
+    
+    public bool CheckPenalty(KeyCode key, float increase, float threshold, float decayRate) // 특정 키에 대한 열기(연타 횟수) 증가율, 임계치, 감소율 
+    {
+        if (!keyHeat.ContainsKey(key)) keyHeat[key] = 0f; // 키가 없으면 키 추가하고 초기 밸류 0으로 설정
+
+        keyHeat[key] = Mathf.Max(0, keyHeat[key] - (decayRate * Time.deltaTime)); // 초당 감소율에 따라 열기 감소
+
+        if (Input.GetKeyDown(key))
+        {
+            keyHeat[key] += increase; // 키 입력시 열기 증가
+        }
+
+        return keyHeat[key] >= threshold; // 임계치를 초과하면 true 반환
+    }
+
+    void ApplyPenalty()
+    {
+        Debug.LogWarning("연타 감지! 페널티가 부과되었습니다.");
+        // 여기서 실제로 캐릭터 이동 속도를 줄이거나, 입력을 차단하는 로직을 넣으세요.
     }
 }
