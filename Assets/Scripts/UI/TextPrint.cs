@@ -12,6 +12,7 @@ public class TextPrint : MonoBehaviour
 
     public int Current => current;
     public int Count => strings.Count;
+    public bool Finished => current >= strings.Count;
 
     public void NextPage()
     {

@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/OutGame/Settings.unity
     guid: fa13543f9355b409fb785476fc3cdfc7
   - enabled: 1
+    path: Assets/Scenes/OutGame/Rule.unity
+    guid: 4bd9b247d4cb74a7699f4ff69c757516
+  - enabled: 1
     path: Assets/PSC-Assets/Scene/inGame.unity
     guid: 4c876313f2fa84cbca2069b3f9124289
   m_configObjects:

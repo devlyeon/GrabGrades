@@ -11,6 +11,7 @@ public class ImageSlide : MonoBehaviour
 
     public int Current => current;
     public int Count => sprites.Count;
+    public bool Finished => current >= sprites.Count;
 
     public void NextPage()
     {
