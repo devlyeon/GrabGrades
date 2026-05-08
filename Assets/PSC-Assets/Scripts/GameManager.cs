@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
@@ -45,6 +47,22 @@ public class GameManager : MonoBehaviour
         SpawnGrade();
         isGameOver = false;
         SoundManager.instance.PlayBGM(SoundType.BGM);
+    }
+
+    void Update()
+    {
+        if (isGameOver) return;
+
+        bool lPenalty = CheckPenalty(KeyCode.A);
+        bool rPenalty = CheckPenalty(KeyCode.L);
+
+        if (lPenalty || rPenalty)
+        {
+            ApplyPenalty(); 
+            Debug.Log("페널티 적용");
+            if (lPenalty) keyHeat[KeyCode.A] = 0f;
+            if (rPenalty) keyHeat[KeyCode.L] = 0f;
+        }
     }
 
     private void SpawnGrade()
@@ -92,7 +110,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void UpdateScore(bool isLeftPlayer) // 득점 - 왼쪽 플레이거 득점을 한게 아니라면 반드시 오른쪽 플레이어가 득점을 한다고 가정
+    private void UpdateScore(bool isLeftPlayer) // 득점 - 왼쪽 플레이어가 득점을 한게 아니라면 반드시 오른쪽 플레이어가 득점을 한다고 가정
     {
         int scoreDelta = gradeScores[currentItemIndex];
 
@@ -105,6 +123,12 @@ public class GameManager : MonoBehaviour
         {
             rScore += scoreDelta;
             rScoreText.text = rScore.ToString();
+        }
+
+        if (currentItemIndex == 2)
+        {
+            SetDefaults();
+            Debug.Log("페널티 해제");
         }
 
         if ((currentItemIndex == 0 || currentItemIndex == 1) && currentItem != null)
@@ -147,7 +171,7 @@ public class GameManager : MonoBehaviour
     }
     
     
-    public bool CheckPenalty(KeyCode key, float increase, float threshold, float decayRate) // 특정 키에 대한 열기(연타 횟수) 증가율, 임계치, 감소율 
+    public bool CheckPenalty(KeyCode key, float increase = 1.0f, float threshold = 3.0f, float decayRate = 2.0f) // 특정 키에 대한 열기(연타 횟수) 증가율, 임계치, 감소율 
     {
         if (!keyHeat.ContainsKey(key)) keyHeat[key] = 0f; // 키가 없으면 키 추가하고 초기 밸류 0으로 설정
 
@@ -163,7 +187,13 @@ public class GameManager : MonoBehaviour
 
     void ApplyPenalty()
     {
-        Debug.LogWarning("연타 감지! 페널티가 부과되었습니다.");
-        // 여기서 실제로 캐릭터 이동 속도를 줄이거나, 입력을 차단하는 로직을 넣으세요.
+        defaultB = 25;
+        defaultA = 5;
+    }
+    
+    void SetDefaults()
+    {
+        defaultB = 65;
+        defaultA = 15;
     }
 }
