@@ -39,10 +39,18 @@ public class SoundManager : MonoBehaviour
             case SoundType.GetSFX: targetClip = getClip; break;
             case SoundType.LostSFX: targetClip = loseClip; break;
         }
-        if (targetClip != null) sfxSource.PlayOneShot(targetClip, volume);
+        if (targetClip != null)
+        {
+            float audioVolume = volume;
+            if (AudioManager.audioManager != null)
+            {
+                audioVolume *= AudioManager.audioManager.SfxVolume;
+            }
+            sfxSource.PlayOneShot(targetClip, audioVolume);
+        }
     }
 
-    // 배경음 재생 (수정된 버전)
+    // 배경음 재생
     public void PlayBGM(SoundType type, bool loop = true)
     {
         AudioClip targetClip = null;

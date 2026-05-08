@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
     {
         SpawnGrade();
         isGameOver = false;
-        SoundManager.instance.PlayBGM(SoundType.BGM);
+        //SoundManager.instance.PlayBGM(SoundType.BGM);
     }
 
     void Update()
