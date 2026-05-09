@@ -3017,7 +3017,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1634d3a4e9a9c4474a3a9cf2519e9dd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Timer
-  remainingTime: 10
+  remainingTime: 80
   timerText: {fileID: 176158748}
   WinUI: {fileID: 1222940233}
   LoseUI: {fileID: 1436432651}
