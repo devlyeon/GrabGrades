@@ -9,6 +9,7 @@ public class TimerManager : MonoBehaviour
     [SerializeField] private Image WinUI;
     [SerializeField] private Image LoseUI;
     [SerializeField] private Image DrawUI;
+    [SerializeField] private TextMeshProUGUI continueText;
     [SerializeField] private RectTransform LeftPos;
     [SerializeField] private RectTransform RightPos;
 
@@ -41,6 +42,7 @@ public class TimerManager : MonoBehaviour
             {
                 DrawUI.gameObject.SetActive(true);
             }
+            continueText.gameObject.SetActive(true);
         }
 
         timer(remainingTime);

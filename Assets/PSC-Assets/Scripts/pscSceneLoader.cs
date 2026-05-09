@@ -22,11 +22,11 @@ public class pscSceneLoader : MonoBehaviour
     public void RestartGame()
     {
         string currentSceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
-        UnityEngine.SceneManagement.SceneManager.LoadScene(currentSceneName);
+        SceneLoader.loader.LoadScene(currentSceneName);
     }
 
     public void ReturnToMainMenu()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Splash");
+        SceneLoader.loader.LoadScene("Splash");
     }
 }
