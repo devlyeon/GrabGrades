@@ -8,7 +8,7 @@ public class TimerManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI timerText; // UI 연결용
     [SerializeField] private Image WinUI;
     [SerializeField] private Image LoseUI;
-    [SerializeField] private TextMeshProUGUI DrawUI;
+    [SerializeField] private Image DrawUI;
     [SerializeField] private RectTransform LeftPos;
     [SerializeField] private RectTransform RightPos;
 
